@@ -8,28 +8,26 @@ const initialState = {
 
 export const addProduct = createAsyncThunk('product/addProduct', async (data) => {
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/product`, data)
-    return res.data
+    return data
 })
 
 export const viewProduct = createAsyncThunk('product/viewProduct', async () => {
     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/product`)
-    return res.data
+    // console.log("res..",res);
+    return res.data.product
 })
 
 
 export const deleteProduct = createAsyncThunk('product/deleteProduct', async (id) => {
     const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/product/${id}`)
-    return res.data
+    return id
 })
 
 export const editProduct = createAsyncThunk('product/editProduct', async (data) => {
-    console.log("data..........");
-    console.log(data);
-    const { id } = data
-    console.log("id............");
-    console.log(id);
-    const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/product/${id}`, data)
-    return res.data
+    const { _id } = data
+    console.log(_id)
+    const res = await axios.put(`${import.meta.env.VITE_BASE_URL}/product/${_id}`, data)
+    return res.product
 })
 
 
@@ -51,7 +49,7 @@ const ProductSlice = createSlice({
             .addCase(deleteProduct.fulfilled, (state, action) => {
                 const id = action.payload
                 const new_Data = state.productList.filter((product) => {
-                    return product.id !== id
+                    return product._id !== id
                 })
                 state.productList = new_Data
             })
@@ -59,7 +57,7 @@ const ProductSlice = createSlice({
                 const id = action.payload
 
                 const index_number = state.productList.find((product) => {
-                    return product.id == id
+                    return product._id == id
                 })
                 if (index_number != -1) {
                     state.productList[index_number] = action.payload

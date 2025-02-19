@@ -23,6 +23,7 @@ import { editProduct, viewProduct } from '../../Redux/ProductSlice'
 import axios from 'axios'
 import { Bounce, toast } from 'react-toastify'
 import { viewCategory } from '../../Redux/CategorySlice'
+import { viewsubcategory } from '../../Redux/SubCategorySlice'
 const UpdateProduct = () => {
     const { productList } = useSelector((state) => state.products)
     const { categoryList } = useSelector((state) => state.categories)
@@ -90,25 +91,30 @@ const UpdateProduct = () => {
     //     })
     // }
 
-    const categories = categoryList?.map((category) => {
-        return category.procat
+    const categories = categoryList?.category?.map((category) => {
+        return category.cat_name
     })
     console.log("categories...........");
-
     console.log(categories);
 
     const uniqueCategories = new Set(categories)
     console.log("uniqueCategories.........");
     console.log(uniqueCategories);
 
-    const singleProduct = productList.find((ele) => {
-        return ele.id == id
+    
+      const { subcategoryList } = useSelector((state) => state.subcategories)
+      console.log("subcategoryList................");
+      console.log(subcategoryList);
+
+    const singleProduct = productList?.find((ele) => {
+        return ele._id == id
     })
     console.log('sin', singleProduct)
 
     useEffect(() => {
         dispatch(viewProduct())
         dispatch(viewCategory())
+        dispatch(viewsubcategory())
         reset(singleProduct)
     }, [dispatch])
 
@@ -116,7 +122,7 @@ const UpdateProduct = () => {
 
         try {
             const formData = new FormData()
-            formData.append('file', data.proimage[0])
+            formData.append('file', data.product_img[0])
             formData.append('upload_preset', 'AdminPanel')
             formData.append('cloud_name', 'dlubn6dax')
 
@@ -126,19 +132,21 @@ const UpdateProduct = () => {
             )
 
             const payload = {
-                id: singleProduct.id,
-                proname: data.proname,
-                procat: data.procat,
-                proqun: data.proqun,
-                proprice: data.proprice,
-                prodesc: data.prodesc,
-                proimage: cloudinaryResponse.data.secure_url,
+                _id: singleProduct._id,
+                product_name: data.product_name,
+                category: data.category,
+                sub_cat: data.sub_cat,
+                product_quan: data.product_quan,
+                product_price: data.product_price,
+                product_desc: data.product_desc,
+                product_img: cloudinaryResponse.data.secure_url,
             }
             // console.log("payload",payload);
 
             dispatch(editProduct(payload))
             navigate('/Product/ViewProduct')
             reset()
+            alert("updated....")
         } catch (error) {
             console.error('Error uploading image:', error)
         }
@@ -146,78 +154,97 @@ const UpdateProduct = () => {
 
     return (
         <div>
-            <cRow>
+            <CRow>
                 <CCol xs={12}>
-                    <DocsComponents href="forms/form-control/" />
                     <CCard className="mb-4">
-                        <CCardHeader>
-                            <strong>Update Product</strong>
+                        <CCardHeader className='bg-dark text-light'>
+                            <strong>Add Product</strong>
                         </CCardHeader>
                         <CCardBody>
-                            <DocsExample href="forms/form-control">
-                                <CForm method='post' onSubmit={handleSubmit(Update)}>
-                                    <div className="mb-3">
-                                        <CFormLabel htmlFor="exampleFormControlInput1">Product Name</CFormLabel>
-                                        <CFormInput
-                                            type="text"
-                                            id="exampleFormControlInput1"
-                                            placeholder="Enter Product Name"
-                                            {...register('proname')}
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <CFormLabel htmlFor="exampleFormControlInput1">Product Price</CFormLabel>
-                                        <CFormInput
-                                            type="text"
-                                            id="exampleFormControlInput1"
-                                            placeholder="Enter Product Price"
-                                            {...register('proprice')}
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <CFormLabel htmlFor="exampleFormControlInput1">Product Quantity</CFormLabel>
-                                        <CFormInput
-                                            type="text"
-                                            id="exampleFormControlInput1"
-                                            placeholder="Enter Product Quantity"
-                                            {...register('proqun')}
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <CFormLabel htmlFor="exampleFormControlTextarea1">Product Description</CFormLabel>
-                                        <CFormTextarea id="exampleFormControlTextarea1" rows={3} {...register('prodesc')}></CFormTextarea>
-                                    </div>
-                                    <div>
-                                        <CFormLabel>Product Category</CFormLabel>
-                                        <CFormSelect
-                                            aria-label="Default select example"
-                                            // onChange={(e) => setCategory(e.target.value)}
-                                            {...register('procat')}
-                                        >
-                                            <option value="">Select a category</option>
-                                            {[...uniqueCategories]?.map((cat, index) => (
-                                                <option key={index} value={cat}>
-                                                    {cat}
-                                                </option>
-                                            ))}
-                                        </CFormSelect>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="image">Upload Image</label>
-                                        <input
-                                            {...register('proimage', { required: 'Please select an image file.' })} // Register the file input
-                                            id="image"
-                                            type="file"
-                                            accept="image/"
-                                        />
-                                    </div>
-                                    <button className='btn btn-outline-warning'>Update</button>
-                                </CForm>
-                            </DocsExample>
+                            <CForm method="post" onSubmit={handleSubmit(Update)}>
+                                <div>
+                                    <CFormLabel>Product Category</CFormLabel>
+                                    <CFormSelect
+                                        aria-label="Default select example"
+                                        // onChange={(e) => setCategory(e.target.value)}
+                                        {...register('category')}
+                                    >
+                                        <option value="">Select a category</option>
+                                        {categoryList?.category?.map((ele, index) => (
+                                            <option key={index} value={ele._id}>
+                                                {ele?.cat_name}
+                                            </option>
+                                        ))}
+                                    </CFormSelect>
+                                </div>
+                                <div>
+                                    <CFormLabel>Product Sub Category</CFormLabel>
+                                    <CFormSelect
+                                        aria-label="Default select example"
+                                        {...register('sub_cat')}
+                                    >
+                                        <option value="">Select a sub category</option>
+                                        {subcategoryList?.map((ele, index) => (
+                                            <option key={index} value={ele._id}>
+                                                {ele?.sub_cat}
+                                            </option>
+                                        ))}
+                                    </CFormSelect>
+                                </div>
+                                <div className="mb-3">
+                                    <CFormLabel htmlFor="productName">Product Name</CFormLabel>
+                                    <CFormInput
+                                        type="text"
+                                        id="productName"
+                                        placeholder="Enter Product Name"
+                                        {...register('product_name', { required: true })}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <CFormLabel htmlFor="productPrice">Product Price</CFormLabel>
+                                    <CFormInput
+                                        type="number"
+                                        id="productPrice"
+                                        placeholder="Enter Product Price"
+                                        {...register('product_price', { required: true })}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <CFormLabel htmlFor="productQuantity">Product Quantity</CFormLabel>
+                                    <CFormInput
+                                        type="number"
+                                        id="productQuantity"
+                                        placeholder="Enter Product Quantity"
+                                        {...register('product_quan', { required: true })}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <CFormLabel htmlFor="productDescription">Product Description</CFormLabel>
+                                    <CFormTextarea
+                                        id="productDescription"
+                                        rows={3}
+                                        placeholder="Enter Product Description"
+                                        {...register('product_desc')}
+                                    ></CFormTextarea>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label htmlFor="image">Upload Image</label>
+                                    <input
+                                        {...register('product_img', { required: 'Please select an image file.' })} // Register the file input
+                                        id="image"
+                                        type="file"
+                                        accept="image/"
+                                    />
+                                </div>
+                                <button className="btn btn-outline-success my-3" type="submit">
+                                    Submit
+                                </button>
+                            </CForm>
                         </CCardBody>
                     </CCard>
                 </CCol>
-            </cRow>
+            </CRow>
         </div>
     )
 }

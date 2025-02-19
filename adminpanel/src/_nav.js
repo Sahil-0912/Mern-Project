@@ -68,7 +68,9 @@ const _nav = [
         to: '/Category/ViewCategory',
       },
 
+
       
+
       // {
       //   component: CNavItem,
       //   name: (
@@ -185,7 +187,7 @@ const _nav = [
       //     text: 'PRO',
       //   },
       // },
-      
+
     ],
   },
   // {
@@ -456,6 +458,26 @@ const _nav = [
 
   {
     component: CNavGroup,
+    name: 'SubCategory',
+    to: '/Product',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'AddSubCategory',
+        to: '/SubCategory/AddSubCategory',
+      },
+      {
+        component: CNavItem,
+        name: 'ViewSubCategory',
+        to: '/SubCategory/ViewSubCategory',
+      },
+
+    ]
+  },
+
+  {
+    component: CNavGroup,
     name: 'Product',
     to: '/Product',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
@@ -470,7 +492,7 @@ const _nav = [
         name: 'ViewProduct',
         to: '/Product/ViewProduct',
       },
-     
+
     ]
   }
 ]

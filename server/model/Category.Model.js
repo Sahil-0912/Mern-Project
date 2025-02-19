@@ -1,17 +1,12 @@
 const { Schema, model } = require("mongoose");
 
-
-const categryschema = new Schema({
+const catschema = new Schema({
     cat_name: {
         type: String,
         required: true,
-        unique: true,
         trim: true
-    },
-
-}, {
-    timestamps: true
+    }
 })
 
-const Category = model('category', categryschema)
+const Category = model('category', catschema)
 module.exports = Category

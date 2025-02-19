@@ -55,6 +55,9 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const AddCategory = React.lazy(() => import('./views/Category/AddCategory'))
 const ViewCategory = React.lazy(() => import('./views/Category/ViewCategory'))
 
+const AddSubCategory = React.lazy(() => import('./views/SubCategory/AddSubCategory'))
+const ViewSubCategory = React.lazy(() => import('./views/SubCategory/ViewSubCategory'))
+
 const AddProduct = React.lazy(() => import('./views/Product/AddProduct'))
 const ViewProduct = React.lazy(() => import('./views/Product/ViewProdct'))
 const UpdateProduct = React.lazy(() => import('./views/Product/UpdateProduct'))
@@ -73,6 +76,12 @@ const routes = [
   { path: '/Category/AddCategory', name: 'AddCategory', element: AddCategory },
   { path: '/Category/ViewCategory', name: 'ViewCategory', element: ViewCategory },
   { path: '/Category/UpdateCategory/:id', name: 'UpdateCategory', element: UpdateCategory },
+
+  // subcategory
+
+  { path: '/SubCategory/AddSubCategory', name: 'AddSubCategory', element: AddSubCategory },
+  { path: '/SubCategory/ViewSubCategory', name: 'ViewSubCategory', element: ViewSubCategory },
+  // { path: '/Category/UpdateCategory/:id', name: 'UpdateCategory', element: UpdateCategory },
 
   //product 
   // { path: '/Product', name: 'Product', element: Cards, exact: true },

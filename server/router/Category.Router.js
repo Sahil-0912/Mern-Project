@@ -1,11 +1,8 @@
 const router = require('express').Router()
+const CategoryController = require('../controller/Category.Controller')
 
-const categoryController = require('../conroller/Category.Controller')
-
-router.post('/addcategory', categoryController.store)
-router.get('/viewcategory', categoryController.index)
-router.delete('/deletecat/:id', categoryController.trash)
-router.put('/editcat/:id', categoryController.edit)
-
-
+router.post('/', CategoryController.store)
+router.get('/', CategoryController.index)
+router.delete('/:id', CategoryController.trash)
+router.put('/:id', CategoryController.edit)
 module.exports = router

@@ -4,6 +4,7 @@ import { DocsComponents, DocsExample } from 'src/components'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import { editcategory } from '../../Redux/CategorySlice'
 
 const UpdateCategory = () => {
     const { categoryList } = useSelector((state) => state.categories)
@@ -11,19 +12,20 @@ const UpdateCategory = () => {
     const { register, handleSubmit,reset } = useForm()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    console.log(categoryList)
 
     useEffect(() => {
-        const single_user = categoryList.find((category) => {
-            return category.id == id
+        const single_user = categoryList?.category?.find((category) => {
+            return category._id == id
         })
        reset(single_user);
     }, [])
 
     function productData(data) {
-        console.log(data);
-        dispatch(editProduct(data))
+    
+        dispatch(editcategory(data))
         alert("Updated....")
-        navigate('/Category/UpdateCategory')
+        navigate('/Category/ViewCategory')
     }
   return (
     <div>
@@ -43,7 +45,7 @@ const UpdateCategory = () => {
                     type="text"
                     id="exampleFormControlInput1"
                     placeholder="Enter Product Category"
-                    {...register('procat', { required: true })}
+                    {...register('cat_name', { required: true })}
                   />
                 </div>
                 <button className="btn btn-outline-warning" type="submit">

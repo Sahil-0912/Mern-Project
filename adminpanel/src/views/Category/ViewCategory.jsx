@@ -14,7 +14,7 @@ import {
 } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteCategory, viewCategory } from '../../Redux/CategorySlice'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { FaTrash } from 'react-icons/fa'
 import { FaPencil } from 'react-icons/fa6'
 
@@ -25,7 +25,6 @@ const ViewCategory = () => {
     useEffect(() => {
         dispatch(viewCategory())
     }, [dispatch])
-
 
     function trash(id) {
         dispatch(deleteCategory(id))
@@ -50,13 +49,13 @@ const ViewCategory = () => {
                                     </CTableRow>
                                 </CTableHead>
                                 <CTableBody>
-                                    {categoryList?.category?.map((cat, index) => (
+                                    {categoryList?.category?.map((ele, index) => (
                                         <CTableRow key={index}>
                                             <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                                            <CTableDataCell>{cat.cat_name}</CTableDataCell>
+                                            <CTableDataCell>{ele.cat_name}</CTableDataCell>
                                             <CTableDataCell>
-                                                <button className='btn btn-danger mx-2' onClick={() => trash(cat._id)}><FaTrash /></button>
-                                                <NavLink to={`/Category/UpdateCategory/${cat.id}`}>
+                                                <button className='btn btn-danger mx-2' onClick={() => trash(ele._id)}><FaTrash /></button>
+                                                <NavLink to={`/Category/UpdateCategory/${ele._id}`}>
                                                     <button className='btn btn-warning'><FaPencil /></button>
                                                 </NavLink>
                                             </CTableDataCell>
